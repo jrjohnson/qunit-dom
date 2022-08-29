@@ -63,6 +63,21 @@ describe('assert.dom(...).hasStyle()', () => {
     ]);
   });
 
+  test('succeeds when actual precision is significantly higher than expected', () => {
+    document.body.innerHTML ='<div style="opacity: .1000000000001;">quit-dom ftw!</div>';
+    assert.dom('div').hasStyle({
+      opacity: 0.1,
+    });
+    expect(assert.results).toEqual([
+      {
+        actual: { opacity: '0.1000000000001' },
+        expected: { opacity: 0.1 },
+        message: 'Element div has style "{"opacity":0.1}"',
+        result: true,
+      },
+    ]);
+  });
+
   test('fails for wrong content', () => {
     assert.dom('.foo').hasStyle({
       opacity: 0,

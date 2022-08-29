@@ -773,9 +773,13 @@ export default class DOMAssertions {
       );
     }
 
-    let result = expectedProperties.every(
-      property => computedStyle[property] === expected[property]
-    );
+    let result = expectedProperties.every(property => {
+      if (typeof expected[property] === 'number') {
+        return Math.abs(Number(computedStyle[property]) - Number(expected[property])) < 0.01;
+      } else {
+        return computedStyle[property] === expected[property];
+      }
+    });
     let actual: ActualCSSStyleDeclaration = {};
 
     expectedProperties.forEach(property => (actual[property] = computedStyle[property]));
